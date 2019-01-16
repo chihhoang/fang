@@ -1,7 +1,9 @@
 package com.fang.datastructure;
 
-/*
-    A Simple Implementation of Binary Tree
+/**
+ * 
+ * A Simple Implementation of Binary Search Tree
+ * 
 */
 public class TreeNode {
     int data;
@@ -46,9 +48,24 @@ public class TreeNode {
         if (left != null)
             left.printInOrder();
         System.out.print(data + " ");
-        if (right != null) {
+        if (right != null)
             right.printInOrder();
-        }
+    }
+
+    void printPreOrder() {
+        System.out.print(data + " ");
+        if (left != null)
+            left.printPreOrder();
+        if (right != null)
+            right.printPreOrder();
+    }
+
+    void printPostOrder() {
+        if (left != null)
+            left.printPostOrder();
+        if (right != null)
+            right.printPostOrder();
+        System.out.print(data + " ");        
     }
 
     public static void main(String[] args) {
@@ -58,7 +75,17 @@ public class TreeNode {
         tree.insert(80);
         tree.insert(40);
 
+        /*
+                  50
+            10          60
+              40          80
+        */
+
         tree.printInOrder(); // 10 40 50 60 80
+        System.out.println();
+        tree.printPreOrder(); // 50 10 40 60 80
+        System.out.println();
+        tree.printPostOrder(); // 40 10 80 60 50
         System.out.println();
         System.out.println(tree.contains(80)); // true
         System.out.println(tree.contains(20)); // false
