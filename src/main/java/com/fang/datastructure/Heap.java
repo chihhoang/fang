@@ -5,9 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Implement a Min Heap
+ * Min Heap and Heap Sort
  */
-
 public class Heap {
     int capacity;
     int size;
@@ -30,22 +29,22 @@ public class Heap {
         return size == 0;
     }
 
-    public void ensureCapacity() {
+    private void ensureCapacity() {
         if (size >= capacity) {
-            heapArray = Arrays.copyOf(heapArray, capacity * 2);
             capacity *= 2;
+            heapArray = Arrays.copyOf(heapArray, capacity);
         }
     }
 
-    int getLeftChildIndex(int parentIndex) {
+    private int getLeftChildIndex(int parentIndex) {
         return parentIndex * 2 + 1;
     }
 
-    int getRightChildIndex(int parentIndex) {
+    private int getRightChildIndex(int parentIndex) {
         return parentIndex * 2 + 2;
     }
 
-    int getParentIndex(int childIndex) {
+    private int getParentIndex(int childIndex) {
         return (childIndex - 1) / 2;
     }
 
@@ -56,19 +55,18 @@ public class Heap {
         heapifyUp();
     }
 
-    void heapifyUp() {
+    private void heapifyUp() {
         int index = size - 1;
         int parentIndex = getParentIndex(size - 1);
         int bottom = heapArray[index];
         while (index > 0 && heapArray[parentIndex] > bottom) {
-            heapArray[index] = heapArray[parentIndex]; // move down
+            heapArray[index] = heapArray[parentIndex]; // move down by shifting index
             index = parentIndex;
             parentIndex = getParentIndex(parentIndex);
         }
         heapArray[index] = bottom;
     }
 
-    // TODO: Fix remove
     public int remove() {
         if (size == 0)
             throw new IllegalStateException();
@@ -80,26 +78,26 @@ public class Heap {
         return data;
     }
 
-    void heapifyDown() {
+    private void heapifyDown() {
         int index = 0;
         int top = heapArray[index]; // save root value
 
-        while (getLeftChildIndex(index) < size) { // has left child
+        while (getLeftChildIndex(index) < size) { // has left child?
             int smallChildIndex = getLeftChildIndex(index);
             if (getRightChildIndex(index) < size
                     && heapArray[getLeftChildIndex(index)] > heapArray[getRightChildIndex(index)]) { // has right child
                                                                                                      // and right > left
                 smallChildIndex = getRightChildIndex(index);
             }
-            if (heapArray[index] < heapArray[smallChildIndex])
+            if (top < heapArray[smallChildIndex])
                 break;
-            heapArray[index] = heapArray[smallChildIndex]; // move down
+            heapArray[index] = heapArray[smallChildIndex]; // move up by shifting index
             index = smallChildIndex;
         }
         heapArray[index] = top;
     }
 
-    void printHeap() {
+    public void printHeap() {
         System.out.println(Arrays.toString(heapArray));
     }
 
@@ -112,15 +110,32 @@ public class Heap {
         heap.insert(8);
         heap.insert(4);
         heap.insert(7);
-        heap.insert(16);
         heap.insert(6);
-        heap.insert(1);
+
+        heap.insert(55);
+        heap.insert(99);
+        heap.insert(44);
+        heap.insert(53);
+        heap.insert(32);
+        heap.insert(55);
+        heap.insert(78);
+        
+        heap.printHeap();
+        // [3, 6, 4, 8, 9, 11, 7, 15, 55, 99, 44, 53, 32, 55, 78, 0, 0]
+        
+        // Test capacity
+        heap.insert(39);
+        heap.insert(42);
+        heap.insert(28);
+        heap.insert(92);
 
         heap.printHeap();
+        // [3, 6, 4, 8, 9, 11, 7, 15, 28, 99, 44, 53, 32, 55, 78, 39, 42, 55, 92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         List<Integer> sortedList = new ArrayList<>();
         while (heap.size() > 0)
             sortedList.add(heap.remove());
         System.out.println(sortedList);
+        // [3, 4, 6, 7, 8, 9, 11, 15, 28, 32, 39, 42, 44, 53, 55, 55, 78, 92, 99]
     }
 }
