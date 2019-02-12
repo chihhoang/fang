@@ -15,7 +15,7 @@ public class LinkedList {
 
     Node head;
 
-    void append(int value) {
+    public void append(int value) {
         if (head == null) {
             head = new Node(value);
             return;
@@ -31,13 +31,13 @@ public class LinkedList {
         curr.next = newNode;
     }
 
-    void prepend(int value) {
+    public void prepend(int value) {
         Node newNode = new Node(value);
         newNode.next = head;
         head = newNode;
     }
 
-    void delete(int value) {
+    public void delete(int value) {
         if (head == null) return;
         if (head.data == value) {
             head = head.next;
@@ -55,7 +55,7 @@ public class LinkedList {
     }
 
     // O(n) space, not in place
-    void reverse() {
+    public void reverse() {
         if (head == null || head.next == null) {
             return;
         }
@@ -70,7 +70,26 @@ public class LinkedList {
         head = newList.head;
     }
 
-    void display() {
+    // O(n) time, O(1) space
+    public void reverse2() {
+        if (head == null || head.next == null)
+            return;
+        
+        // newHead 1 2 null
+        Node newHead = null;
+        Node curr = head;
+        Node tempNext = null;
+        
+        while (curr != null) {
+            tempNext = curr.next;
+            curr.next = newHead;
+            newHead = curr;
+            curr = tempNext;
+        }
+        head = newHead;
+    }
+
+    public void display() {
         Node curr = head;
         while (curr != null) {
             System.out.print(curr.data + " ");
@@ -79,18 +98,41 @@ public class LinkedList {
         System.out.println();
     }
 
+    public void swapInPairs() {
+        if (head == null || head.next == null) return;
+
+        Node dummy = new Node(0);
+        dummy.next = head;
+
+        Node curr = dummy;
+
+        while (curr.next != null && curr.next.next != null) {
+            Node first = curr.next;
+            Node second = curr.next.next;
+            first.next = second.next;
+            curr.next = second; // link
+            curr.next.next = first; // link
+            curr = curr.next.next;
+        }
+        head = dummy.next;
+    }
+
     public static void main(String[] args) {
         LinkedList list = new LinkedList();
         list.prepend(1);
         list.prepend(2);
         list.prepend(3);
         list.append(4);
-
+        
         list.display(); // 3 2 1 4 
+        list.append(5);
+        list.append(6);
+        list.swapInPairs();
+        list.display(); // 2 3 4 1 6 5
         list.delete(4);
-        list.display(); // 3 2 1 
+        list.display(); // 2 3 1 6 5
 
-        list.reverse();
-        list.display(); // 1 2 3 
+        list.reverse2();
+        list.display(); // 5 6 1 3 2
     }
 }
