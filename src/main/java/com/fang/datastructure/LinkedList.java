@@ -4,25 +4,25 @@ package com.fang.datastructure;
  * Linked List Implementation
  */
 public class LinkedList {
-    class Node {
+    class ListNode {
         int data;
-        Node next;
+        ListNode next;
 
-        public Node(int data) {
+        public ListNode(int data) {
             this.data = data;
         }
     }
 
-    Node head;
+    ListNode head;
 
     public void append(int value) {
         if (head == null) {
-            head = new Node(value);
+            head = new ListNode(value);
             return;
         }
 
-        Node curr = head;
-        Node newNode = new Node(value);
+        ListNode curr = head;
+        ListNode newNode = new ListNode(value);
 
         while (curr.next != null) {
             curr = curr.next;
@@ -32,19 +32,20 @@ public class LinkedList {
     }
 
     public void prepend(int value) {
-        Node newNode = new Node(value);
+        ListNode newNode = new ListNode(value);
         newNode.next = head;
         head = newNode;
     }
 
     public void delete(int value) {
-        if (head == null) return;
+        if (head == null)
+            return;
         if (head.data == value) {
             head = head.next;
             return;
         }
 
-        Node curr = head;
+        ListNode curr = head;
         while (curr.next != null) {
             if (curr.next.data == value) {
                 curr.next = curr.next.next;
@@ -61,7 +62,7 @@ public class LinkedList {
         }
 
         LinkedList newList = new LinkedList();
-        Node curr = head;
+        ListNode curr = head;
         while (curr != null) {
             newList.prepend(curr.data);
             curr = curr.next;
@@ -74,12 +75,12 @@ public class LinkedList {
     public void reverse2() {
         if (head == null || head.next == null)
             return;
-        
+
         // newHead 1 2 null
-        Node newHead = null;
-        Node curr = head;
-        Node tempNext = null;
-        
+        ListNode newHead = null;
+        ListNode curr = head;
+        ListNode tempNext = null;
+
         while (curr != null) {
             tempNext = curr.next;
             curr.next = newHead;
@@ -90,7 +91,7 @@ public class LinkedList {
     }
 
     public void display() {
-        Node curr = head;
+        ListNode curr = head;
         while (curr != null) {
             System.out.print(curr.data + " ");
             curr = curr.next;
@@ -99,21 +100,46 @@ public class LinkedList {
     }
 
     public void swapInPairs() {
-        if (head == null || head.next == null) return;
+        if (head == null || head.next == null)
+            return;
 
-        Node dummy = new Node(0);
+        ListNode dummy = new ListNode(0);
         dummy.next = head;
 
-        Node curr = dummy;
+        ListNode curr = dummy;
 
         while (curr.next != null && curr.next.next != null) {
-            Node first = curr.next;
-            Node second = curr.next.next;
+            ListNode first = curr.next;
+            ListNode second = curr.next.next;
             first.next = second.next;
             curr.next = second; // link
             curr.next.next = first; // link
             curr = curr.next.next;
         }
+        head = dummy.next;
+    }
+
+    public void reverseBetween(int m, int n) {
+        if (head == null || m == n)
+            return; // m, n vs. size?
+
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode subListHead = dummy;
+
+        int k = 1;
+        while (k++ < m) {
+            subListHead = subListHead.next; // null check?
+        }
+
+        ListNode subListIter = subListHead.next;
+        while (m++ < n) {
+            ListNode tempNext = subListIter.next;
+            subListIter.next = tempNext.next;
+            tempNext.next = subListHead.next;
+            subListHead.next = tempNext;
+        }
+
         head = dummy.next;
     }
 
@@ -123,8 +149,8 @@ public class LinkedList {
         list.prepend(2);
         list.prepend(3);
         list.append(4);
-        
-        list.display(); // 3 2 1 4 
+
+        list.display(); // 3 2 1 4
         list.append(5);
         list.append(6);
         list.swapInPairs();
@@ -133,6 +159,9 @@ public class LinkedList {
         list.display(); // 2 3 1 6 5
 
         list.reverse2();
+        list.display(); // 5 6 1 3 2
+
+        list.reverseBetween(2, 4);
         list.display(); // 5 6 1 3 2
     }
 }
