@@ -1,9 +1,5 @@
 
-package com.fang;
-
-import java.io.*;
-import java.util.*;
-
+package com.fang.algorithm;
 /*
 SalesPath
 [Pramp]
