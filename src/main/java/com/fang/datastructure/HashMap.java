@@ -52,7 +52,7 @@ public class HashMap<K, V> implements MyMap<K, V> {
      * Hashing function
      */
     public int getBucketIndex(K key) {
-        return key.hashCode() % bucketSize;
+        return Math.abs(key.hashCode() % bucketSize);
     }
 
     public V remove(K key) {
